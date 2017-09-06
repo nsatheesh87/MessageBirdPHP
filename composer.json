@@ -1,0 +1,23 @@
+{
+  "name": "nsatheesh87/messagebird",
+  "description": "A simple PHP application consumes MessageBird API to process SMS",
+  "homepage": "https://github.com/rafaelmonteiro/messagebird",
+  "authors": [
+    {
+      "name": "Satheesh Narayanan",
+      "email": "nsatheesh87@gmail.com"
+    }
+  ],
+  "require": {
+    "messagebird/php-rest-api": "^1.6",
+    "php" : ">=7.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  }
+}
