@@ -3,9 +3,12 @@
 namespace Providers\Services\MessageBird;
 use Http\JsonResponse as Response;
 use Config\Config as Config;
-use Exceptions\AppException as Exception;
 use StdClass;
 
+/**
+ * Class Sender
+ * @package Providers\Services\MessageBird
+ */
 class Sender implements SenderInterface
 {
 
@@ -18,21 +21,45 @@ class Sender implements SenderInterface
     const UDH_HEADER            = '050003';
     const INTERNAL_SERVER_ERROR = '500';
 
+    /**
+     * @var
+     */
     protected $message;
+    /**
+     * @var
+     */
     protected $recipients;
+    /**
+     * @var
+     */
     protected $originator;
+    /**
+     * @var
+     */
     protected $isSingleMessage;
+    /**
+     * @var string
+     */
     protected $key;
+    /**
+     * @var Response
+     */
     protected $response;
 
+    /**
+     * Sender constructor.
+     */
     public function __construct()
     {
         $this->key                    = config::getActivationKey();
         $this->MessageBird            = new \MessageBird\Client($this->key);
-        $this->messageObject                = new \MessageBird\Objects\Message();
+        $this->messageObject          = new \MessageBird\Objects\Message();
         $this->response               = new Response();
     }
 
+    /**
+     *
+     */
     private function createMessage()
     {
        // echo $this->recipients; exit;
@@ -43,6 +70,10 @@ class Sender implements SenderInterface
 
     }
 
+    /**
+     * @param $message
+     * @param $udh
+     */
     private function createBinaryMessage($message, $udh)
     {
         $this->messageObject->originator              = $this->originator;
@@ -53,7 +84,11 @@ class Sender implements SenderInterface
         $this->messageObject->typeDetails             = new StdClass();
         $this->messageObject->typeDetails->udh        = $udh;
     }
-    
+
+    /**
+     * @param $message
+     * @return array
+     */
     private function createUDHeader($message)
     {
        $totalMsgParts     = ceil(strlen($message)/self::SPLIT_MESSAGE_LENGTH);
@@ -78,11 +113,20 @@ class Sender implements SenderInterface
        return $UDH;           
     }
 
+    /**
+     * @param $message
+     * @return bool
+     */
     private function isSingleMessage($message)
     {
         return strlen($message) < self::SINGLE_MESSAGE_LENGTH;
     }
 
+    /**
+     * @param string $message
+     * @param string $phoneNumbers
+     * @param string $originator
+     */
     public function composeMessage(string $message, string $phoneNumbers, string $originator)
     {
       $this->message        = $message;
@@ -95,6 +139,9 @@ class Sender implements SenderInterface
       }
     }
 
+    /**
+     * @return \MessageBird\Objects\Balance|\MessageBird\Objects\Hlr|\MessageBird\Objects\Lookup|\MessageBird\Objects\Message|\MessageBird\Objects\Verify|\MessageBird\Objects\VoiceMessage
+     */
     public function send()
     {
         try {

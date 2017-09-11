@@ -4,12 +4,13 @@ use Http\JsonRequest as Request;
 use Http\JsonResponse as Response;
 use Exceptions\AppException as Exception;
 
+/**
+ * Class MessageController
+ *
+ * @package MessageBird
+ */
 class MessageController extends Controller
 {
-    private $ServiceContainer;
-    private $request;
-    private $response;
-
     const FIELDS_ARE_MISSING_MESSAGE      = 'Some fields are missing';
     const INVALID_MESSAGE_TYPE            = 'Invalid message type, must be string';
     const INVALID_ORIGINATOR_TYPE         = 'Invalid originator type, must be (string) MessageBird';
@@ -25,8 +26,26 @@ class MessageController extends Controller
 
     const ORIGINATOR_VALUE                = 'MessageBird';
 
-    const INVALID_REQUEST_CODE            = 502;
+    const INVALID_REQUEST_CODE            = 500;
 
+    /**
+     * @var \Providers\Services\ServiceContainer
+     */
+    private $ServiceContainer;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var Response
+     */
+    private $response;
+
+    /**
+     * MessageController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -35,6 +54,11 @@ class MessageController extends Controller
         $this->response         = new Response();
     }
 
+    /**
+     * @param $requestData
+     * @return bool
+     * @throws Exception
+     */
     private function isValidFormat($requestData)
     {
         if(!@$requestData[self::RECIPIENT]
@@ -47,6 +71,10 @@ class MessageController extends Controller
         return true;
     }
 
+    /**
+     * @param $requestData
+     * @throws Exception
+     */
     private function validateInput($requestData)
     {
         if(!filter_var($requestData[self::RECIPIENT], FILTER_VALIDATE_FLOAT)){
@@ -57,6 +85,10 @@ class MessageController extends Controller
             throw new Exception(self::INVALID_ORIGINATOR_TYPE, self::INVALID_REQUEST_CODE);
         }
     }
+
+    /**
+     *
+     */
     public function sendSmsMessage()
     {
         $requestData = $this->request->data();

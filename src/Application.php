@@ -3,13 +3,23 @@
 namespace MessageBird;
 use Controllers\MessageController;
 
+/**
+ * Class Application
+ * @package MessageBird
+ */
 class Application
 {
+    /**
+     * Application constructor.
+     */
     public function __construct()
     {
 
     }
 
+    /**
+     * @return mixed
+     */
     public function run()
     {
         //PS Fix it: I have only one purpose for this whole application with a Single Controller, Passing controller name directly

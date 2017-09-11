@@ -3,7 +3,7 @@
 namespace Exceptions;
 
 /**
- * Class FormattedException
+ * Class AppException
  *
  * @package MessageBird\Exceptions
  */
